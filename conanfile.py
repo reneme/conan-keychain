@@ -1,6 +1,4 @@
 from conans import ConanFile, CMake, tools
-import os
-
 
 class KeychainConan(ConanFile):
     name = "keychain"
