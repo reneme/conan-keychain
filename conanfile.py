@@ -17,6 +17,11 @@ class KeychainConan(ConanFile):
     _source_subfolder = "source_subfolder"
     _build_subfolder = "build_subfolder"
 
+    def requirements(self):
+        if self.settings.os == "Linux":
+            self.requires("glib/2.58.3@bincrafters/stable")
+            # TODO: keychain also requires 'libsecret-1' which is not in conan
+
     def source(self):
         git = tools.Git(folder=self._source_subfolder)
         git.clone(self.homepage)
