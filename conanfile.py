@@ -1,4 +1,5 @@
 from conans import ConanFile, CMake, tools
+import os
 
 class KeychainConan(ConanFile):
     name = "keychain"
@@ -9,7 +10,6 @@ class KeychainConan(ConanFile):
     license = "MIT"
     exports_sources = ["CMakeLists.txt"]
     generators = "cmake"
-    version = "latest"
 
     # Options may need to change depending on the packaged library
     settings = "os", "arch", "compiler", "build_type"
@@ -23,9 +23,9 @@ class KeychainConan(ConanFile):
             # TODO: keychain also requires 'libsecret-1' which is not in conan
 
     def source(self):
-        git = tools.Git(folder=self._source_subfolder)
-        git.clone(self.homepage)
-        git.checkout("feature/install")
+        tools.get(**self.conan_data["sources"][self.version])
+        extracted_dir = self.name + "-" + self.version
+        os.rename(extracted_dir, self._source_subfolder)
 
     def _configure_cmake(self):
         cmake = CMake(self)
