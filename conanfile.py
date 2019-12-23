@@ -17,6 +17,10 @@ class KeychainConan(ConanFile):
     _source_subfolder = "source_subfolder"
     _build_subfolder = "build_subfolder"
 
+    def build_requirements(self):
+        if self.settings.os == "Linux":
+            self.build_requires("pkg-config_installer/0.29.2@bincrafters/stable")
+
     def requirements(self):
         if self.settings.os == "Linux":
             self.requires("glib/2.58.3@bincrafters/stable")
