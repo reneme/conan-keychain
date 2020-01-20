@@ -5,8 +5,8 @@ class KeychainConan(ConanFile):
     name = "keychain"
     description = "A cross-platform wrapper for the operating system's credential storage"
     topics = ("conan", "security", "keychain")
-    # url = "https://github.com/bincrafters/conan-libname"
-    homepage = "https://github.com/reneme/keychain"
+    url = "https://github.com/reneme/conan-keychain"
+    homepage = "https://github.com/hrantzsch/keychain"
     license = "MIT"
     exports_sources = ["CMakeLists.txt"]
     generators = "cmake"
