@@ -2,3 +2,6 @@ sources:
   "1.0":
     url: "https://github.com/hrantzsch/keychain/archive/v1.0.tar.gz"
     sha256: "00d9c67bf26272aff60f0ced98a9d9454fcbbe86479cce9ea0676dd77d0526e9"
+  "1.1":
+    url: "https://github.com/hrantzsch/keychain/archive/v1.1.tar.gz"
+    sha256: "f183400dd3eada7b65ef3122764e6d8bdde0e901e30a9927ca4b7e8f58e8354d"
