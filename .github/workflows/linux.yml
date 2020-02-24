@@ -21,11 +21,22 @@ jobs:
           python-version: '3.8'
       - name: Install Conan
         run: |
-          pip install bincrafters_package_tools
+          pip install conan
           conan user
+      - name: Install libsecret and other dependencies
+        # Only libsecret is required for building the package. However, the test-package needs an
+        # actual keyring.
+        run: |
+          sudo apt-get update
+          sudo apt-get install libsecret-1-dev dbus-x11 dbus gnome-keyring libgnome-keyring-dev
       - name: Run
         run: |
-          python build.py
+            # steps required to setup the keyring
+            export DISPLAY=:99.0
+            eval $(dbus-launch --sh-syntax)
+            echo '$(whoami)' | gnome-keyring-daemon -r -d --unlock
+            # build the package and test-package
+            conan create . keychain/1.1@ --build missing
 
   Clang:
     runs-on: ubuntu-18.04
@@ -42,8 +53,19 @@ jobs:
           python-version: '3.8'
       - name: Install Conan
         run: |
-          pip install bincrafters_package_tools
+          pip install conan
           conan user
+      - name: Install libsecret and other dependencies
+        # Only libsecret is required for building the package. However, the test-package needs an
+        # actual keyring.
+        run: |
+          sudo apt-get update
+          sudo apt-get install libsecret-1-dev dbus-x11 dbus gnome-keyring libgnome-keyring-dev
       - name: Run
         run: |
-          python build.py
+            # steps required to setup the keyring
+            export DISPLAY=:99.0
+            eval $(dbus-launch --sh-syntax)
+            echo '$(whoami)' | gnome-keyring-daemon -r -d --unlock
+            # build the package and test-package
+            conan create . keychain/1.1@ --build missing
