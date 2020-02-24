@@ -18,7 +18,6 @@ class KeychainConan(ConanFile):
     _build_subfolder = "build_subfolder"
 
     def requirements(self):
-        pass
         # Note: keychain requires 'libsecret-1' on Linux which is not in Conan. libsecret must
         # therefore be installed on the system manually.
         # It further requires `glib-2.0` (via libsecret), which is in Conan. However, we cannot use
@@ -26,6 +25,10 @@ class KeychainConan(ConanFile):
         # For both of these dependencies, keychain relies on pkgconfig in order to find them. Once
         # both of the dependencies are available in Conan, we can use `pkg-config_installer` to find
         # them via pkgconfig.
+        #
+        # check if pkgconfig can find the dependencies
+        tools.PkgConfig("libsecret-1")
+        tools.PkgConfig("glib-2.0")
 
     def source(self):
         tools.get(**self.conan_data["sources"][self.version])
