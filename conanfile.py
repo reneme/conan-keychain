@@ -5,8 +5,8 @@ class KeychainConan(ConanFile):
     name = "keychain"
     description = "A cross-platform wrapper for the operating system's credential storage"
     topics = ("conan", "security", "keychain")
-    # url = "https://github.com/bincrafters/conan-libname"
-    homepage = "https://github.com/reneme/keychain"
+    url = "https://github.com/reneme/conan-keychain"
+    homepage = "https://github.com/hrantzsch/keychain"
     license = "MIT"
     exports_sources = ["CMakeLists.txt"]
     generators = "cmake"
@@ -17,14 +17,18 @@ class KeychainConan(ConanFile):
     _source_subfolder = "source_subfolder"
     _build_subfolder = "build_subfolder"
 
-    def build_requirements(self):
-        if self.settings.os == "Linux":
-            self.build_requires("pkg-config_installer/0.29.2@bincrafters/stable")
-
     def requirements(self):
-        if self.settings.os == "Linux":
-            self.requires("glib/2.58.3@bincrafters/stable")
-            # TODO: keychain also requires 'libsecret-1' which is not in conan
+        # Note: keychain requires 'libsecret-1' on Linux which is not in Conan. libsecret must
+        # therefore be installed on the system manually.
+        # It further requires `glib-2.0` (via libsecret), which is in Conan. However, we cannot use
+        # it as it might be incompatible with the system-installed version of libsecret.
+        # For both of these dependencies, keychain relies on pkgconfig in order to find them. Once
+        # both of the dependencies are available in Conan, we can use `pkg-config_installer` to find
+        # them via pkgconfig.
+        #
+        # check if pkgconfig can find the dependencies
+        tools.PkgConfig("libsecret-1")
+        tools.PkgConfig("glib-2.0")
 
     def source(self):
         tools.get(**self.conan_data["sources"][self.version])
@@ -55,3 +59,5 @@ class KeychainConan(ConanFile):
             self.cpp_info.frameworks = ['Security', 'CoreFoundation']
         if self.settings.os == "Windows":
             self.cpp_info.system_libs = ['Crypt32']
+        if self.settings.os == "Linux":
+            self.cpp_info.system_libs = ["secret-1", "glib-2.0"]
